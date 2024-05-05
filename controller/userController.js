@@ -93,7 +93,7 @@ const updateCurrentUser = asyncHandler(async (req,res) => {
 //route GET /api/users/
 //@access Private
 const getUsers = asyncHandler(async (req,res) => {
-    const users = await User.find({});
+    const users = await User.find({}).select('-password').sort({ createdAt: -1 });
     res.status(200).json(users);
 })
 

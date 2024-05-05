@@ -6,18 +6,24 @@ const colors  = require('colors');
 const userRoutes  = require('./routes/userRoutes');
 const {errorHandler , notFound} =  require('./middleware/errorMiddleWare');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
+
 const connectDB = require('./config/db');
 connectDB();
-
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials:true,
+  exposedHeaders: ["set-cookie"]
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser());
 
+
+
 app.use('/api/users',userRoutes);
 app.get('/test', (req,res) => res.send('Server is ready'));
-
-
 
 app.use(notFound);
 app.use(errorHandler);

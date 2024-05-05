@@ -1,4 +1,3 @@
-const exp = require('constants');
 const jwt = require('jsonwebtoken');
 
 const generateToken = (res , userId) => {
