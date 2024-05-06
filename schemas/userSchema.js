@@ -1,5 +1,4 @@
-const { object, string, ref } =  require('yup');
-const  mongoose = require('mongoose');
+const { object, string } =  require('yup');
 
 const createUserSchema = object({
     body: object({

@@ -3,7 +3,10 @@ const dotenv = require('dotenv').config()
 const PORT  =  process.env.PORT || 5000;
 const app = express();
 const colors  = require('colors');
+
 const userRoutes  = require('./routes/userRoutes');
+const workerRoutes = require('./routes/workerRoutes');
+
 const {errorHandler , notFound} =  require('./middleware/errorMiddleWare');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -23,7 +26,8 @@ app.use(cookieParser());
 
 
 app.use('/api/users',userRoutes);
-app.get('/test', (req,res) => res.send('Server is ready'));
+app.use('/api/workers',workerRoutes);
+app.get('/api/test', (req,res) => res.send('Server is ready'));
 
 app.use(notFound);
 app.use(errorHandler);

@@ -4,14 +4,18 @@ const router = express.Router();
 const {validateRequest} = require('../middleware/validateRequest');
 const {createUserSchema,loginUserSchema,updateUserSchema,deleteUserSchema,updateUserProfileSchema} = require('../schemas/userSchema');
 const {authUser,createUser,deleteUser,updateUser,getUsers,logoutUser,updateCurrentUser} = require('../controller/userController');
-const {authorize} = require('../middleware/authMiddleWare');
+const {authorizeUser} = require('../middleware/authMiddleWare');
 
 
-router.route('/').get(authorize,getUsers).post(validateRequest(createUserSchema),createUser);
-router.route('/profile').put(authorize,validateRequest(updateUserProfileSchema) ,updateCurrentUser)
-router.route('/login').post(validateRequest(loginUserSchema),authUser)
-router.route('/logout').post(authorize,logoutUser);
-router.route('/:id').delete(authorize ,validateRequest(deleteUserSchema),deleteUser).put(authorize,validateRequest(updateUserSchema),updateUser);
+router.route('/').get(authorizeUser,getUsers).post(authorizeUser,validateRequest(createUserSchema),createUser);
+
+router.route('/profile').put(authorizeUser,validateRequest(updateUserProfileSchema) ,updateCurrentUser);
+
+router.route('/login').post(validateRequest(loginUserSchema),authUser);
+
+router.route('/logout').post(authorizeUser,logoutUser);
+
+router.route('/:id').delete(authorizeUser ,validateRequest(deleteUserSchema),deleteUser).put(authorizeUser,validateRequest(updateUserSchema),updateUser);
 
 
 module.exports = router;
