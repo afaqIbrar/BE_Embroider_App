@@ -8,7 +8,7 @@ const {getAllWorkers,createWorker,deleteWorker,updateWorker}  = require('../cont
 
 router.route('/').get(authorizeUser,getAllWorkers).post(authorizeUser,validateRequest(createWorkerSchema),createWorker);
 
-router.route('/:id').delete(authorizeUser,validateRequest(deleteWorkerSchema),deleteWorker).put(authorizeUser,validateRequest(deleteWorkerSchema),updateWorker);
+router.route('/:id').delete(authorizeUser,validateRequest(deleteWorkerSchema),deleteWorker).put(authorizeUser,validateRequest(updateWorkerSchema),updateWorker);
 
 
 

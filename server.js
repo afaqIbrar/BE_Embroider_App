@@ -6,6 +6,7 @@ const colors  = require('colors');
 
 const userRoutes  = require('./routes/userRoutes');
 const workerRoutes = require('./routes/workerRoutes');
+const processLotRoutes = require('./routes/processLotRoutes');
 
 const {errorHandler , notFound} =  require('./middleware/errorMiddleWare');
 const cookieParser = require('cookie-parser');
@@ -13,6 +14,7 @@ const cors = require('cors');
 
 const connectDB = require('./config/db');
 connectDB();
+
 app.use(cors({
   origin: 'http://localhost:3000',
   credentials:true,
@@ -27,6 +29,7 @@ app.use(cookieParser());
 
 app.use('/api/users',userRoutes);
 app.use('/api/workers',workerRoutes);
+app.use('/api/processLot',processLotRoutes);
 app.get('/api/test', (req,res) => res.send('Server is ready'));
 
 app.use(notFound);
