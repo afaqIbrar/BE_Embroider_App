@@ -8,7 +8,7 @@ const {getAllProcessLot,createProcessLot,deleteProcessLot,updateProcessLot}  = r
 
 router.route('/').get(authorizeUser, getAllProcessLot).post(authorizeUser,validateRequest(createProcessLotSchema),createProcessLot);
 
-router.route('/:id').delete(authorizeUser,validateRequest(deleteProcessLot),deleteProcessLot).put(authorizeUser,validateRequest(updateProcessLotSchema),updateProcessLot);
+router.route('/:id').delete(authorizeUser,validateRequest(deleteProcessLotSchema),deleteProcessLot).put(authorizeUser,validateRequest(updateProcessLotSchema),updateProcessLot);
 
 
 

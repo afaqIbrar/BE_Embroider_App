@@ -13,7 +13,7 @@ router.route('/profile').put(authorizeUser,validateRequest(updateUserProfileSche
 
 router.route('/login').post(validateRequest(loginUserSchema),authUser);
 
-router.route('/logout').post(authorizeUser,logoutUser);
+router.route('/logout').post(logoutUser);
 
 router.route('/:id').delete(authorizeUser ,validateRequest(deleteUserSchema),deleteUser).put(authorizeUser,validateRequest(updateUserSchema),updateUser);
 

@@ -16,6 +16,9 @@ const  createProcessLot = asyncHandler( async(req,res) => {
         res.status(400);
         throw new Error('Process Lot Already exist with this data');
     }
+    if(handWorkerId || dupattaWorkerId || innerWorkerId) {
+        req.body.assignDate = new Date();
+    }
     const processLot = await ProcessLot.create({...req.body});
         if(!processLot) {
         res.status(400);
@@ -36,11 +39,15 @@ const deleteProcessLot = asyncHandler(async(req,res) => {
 
 
 const updateProcessLot = asyncHandler(async(req,res) => {
-    const processLot = await ProcessLot.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!processLot) {
+    const existingProcessLot = await ProcessLot.findById(req.params.id);
+    if (!existingProcessLot) {
         res.status(400);
         throw new Error('Process lot not found');
-    }    
+    }   
+    if (!existingProcessLot.assignDate && (req.body.handWorkerId || req.body.dupattaWorkerId || req.body.innerWorkerId)) {
+        req.body.assignDate = new Date();
+    }
+    const processLot = await ProcessLot.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).json({
         processLot
     });
