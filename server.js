@@ -7,7 +7,7 @@ const colors  = require('colors');
 const userRoutes  = require('./routes/userRoutes');
 const workerRoutes = require('./routes/workerRoutes');
 const processLotRoutes = require('./routes/processLotRoutes');
-
+const workAssignmentRoutes = require('./routes/workAssignmentRoutes');
 const {errorHandler , notFound} =  require('./middleware/errorMiddleWare');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -30,6 +30,7 @@ app.use(cookieParser());
 app.use('/api/users',userRoutes);
 app.use('/api/workers',workerRoutes);
 app.use('/api/processLot',processLotRoutes);
+app.use('/api/work',workAssignmentRoutes);
 app.get('/api/test', (req,res) => res.send('Server is ready'));
 
 app.use(notFound);
