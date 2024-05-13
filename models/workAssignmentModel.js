@@ -14,6 +14,11 @@ const workAssignment = mongoose.Schema({
     quantityLog: {
         type:String,
     },
+    workType: {
+        type:String,
+        required: [true, "Please add Work type"],
+        enum: ['HAND_WORK', 'DUPATTA_WORK','INNER_WORK'],
+    },
     quantityReturned: {
         type:String,
     },
