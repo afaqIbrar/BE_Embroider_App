@@ -9,6 +9,15 @@ const getAllWorkers = asyncHandler(
     }
 );
 
+const getWorkerById = asyncHandler(async(req,res) => {
+    const worker = await Worker.findById(req.params.id);
+    if(!worker) {
+        res.status(400);
+        throw new Error('Worker not Found');
+    }
+    res.status(200).json(worker);
+});
+
 const  createWorker = asyncHandler( async(req,res) => {
     const {workerName,workerType,phoneNumber} = req.body;
     const workerExist = await Worker.findOne({workerName,workerType});    
@@ -52,4 +61,4 @@ const updateWorker = asyncHandler(async(req,res) => {
     });
 });
 
-module.exports = {getAllWorkers,createWorker,deleteWorker,updateWorker};
+module.exports = {getAllWorkers,createWorker,deleteWorker,updateWorker,getWorkerById};

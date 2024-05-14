@@ -21,4 +21,9 @@ const deleteWorkerSchema = object({
         id: string().required().matches(/^[0-9a-fA-F]{24}$/),
     })
 })
-module.exports = {createWorkerSchema,updateWorkerSchema,deleteWorkerSchema};
+const getByIdSchema = object({
+    params: object({
+        id: string().required().matches(/^[0-9a-fA-F]{24}$/),
+    })
+})
+module.exports = {createWorkerSchema,updateWorkerSchema,deleteWorkerSchema,getByIdSchema};
