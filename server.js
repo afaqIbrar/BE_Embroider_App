@@ -36,3 +36,5 @@ app.get('/',(req,res) => res.json('Server is ready'))
 app.use(notFound);
 app.use(errorHandler);
 app.listen(PORT, () => console.log(`Server stated on port ${PORT}`.cyan.underline))
+
+module.exports = app;
