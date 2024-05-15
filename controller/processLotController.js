@@ -57,14 +57,14 @@ const updateProcessLot = asyncHandler(async(req,res) => {
         req.body.assignDate = new Date();
     }
     const processLot = await ProcessLot.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if((!existingProcessLot.handWorkerId && req.body.handWorkerId) || (existingProcessLot.handWorkerId.toString() && (existingProcessLot.handWorkerId.toString() !== req.body.handWorkerId))) {
-        await createWorkRecord(processLot._id,handWorkerId,'HAND_WORK');
+    if((!existingProcessLot?.handWorkerId && req.body.handWorkerId) || (existingProcessLot?.handWorkerId && (existingProcessLot?.handWorkerId.toString() && (existingProcessLot?.handWorkerId.toString() !== req.body.handWorkerId)))) {
+        await createWorkRecord(processLot._id,req.body.handWorkerId,'HAND_WORK',res);
     }
-    if((!existingProcessLot.dupattaWorkerId && req.body.dupattaWorkerId) || (existingProcessLot.dupattaWorkerId.toString() && (existingProcessLot.dupattaWorkerId.toString() !== req.body.dupattaWorkerId))) {
-        await createWorkRecord(processLot._id,req.body.dupattaWorkerId,'DUPATTA_WORK');
+    if((!existingProcessLot?.dupattaWorkerId && req.body.dupattaWorkerId) || (existingProcessLot?.dupattaWorkerId && (existingProcessLot?.dupattaWorkerId.toString() && (existingProcessLot?.dupattaWorkerId.toString() !== req.body.dupattaWorkerId)))) {
+        await createWorkRecord(processLot._id,req.body.dupattaWorkerId,'DUPATTA_WORK',res);
     }
-    if((!existingProcessLot.innerWorkerId && req.body.innerWorkerId) || (existingProcessLot.innerWorkerId.toString() && (existingProcessLot.innerWorkerId.toString() !== req.body.innerWorkerId))) {
-        await createWorkRecord(processLot._id,req.body.innerWorkerId,'INNER_WORK');
+    if((!existingProcessLot?.innerWorkerId && req.body.innerWorkerId) || (existingProcessLot?.innerWorkerId && (existingProcessLot?.innerWorkerId.toString() && (existingProcessLot?.innerWorkerId.toString() !== req.body.innerWorkerId)))) {
+        await createWorkRecord(processLot._id,req.body.innerWorkerId,'INNER_WORK',res);
     }
     res.status(200).json({
         processLot

@@ -1,7 +1,7 @@
 const WorkAssignment = require('../models/workAssignmentModel');
 const asyncHandler = require('express-async-handler');
 
-const createWorkRecord = asyncHandler(async (processLotId,workerId,workType) => {
+const createWorkRecord = asyncHandler(async (processLotId,workerId,workType,res) => {
     const workExist = await WorkAssignment.findOne({processLotId,workerId,workType});    
     if(workExist) {
         res.status(400);
