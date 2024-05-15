@@ -16,7 +16,7 @@ const connectDB = require('./config/db');
 connectDB();
 
 app.use(cors({
-  origin: "*",
+  origin: process.env.APP_PATH,
   credentials:true,
   exposedHeaders: ["set-cookie"]
 }));
