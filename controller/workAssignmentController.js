@@ -1,9 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const WorkAssignment = require('../models/workAssignmentModel');
-
+const mongoose = require('mongoose');
 
 const getAllWork = asyncHandler(
     async (req, res) => {
+        let query = {};
         const works = await WorkAssignment.find({}).sort({ createdAt: -1 }).populate({
             path: 'processLotId',
             select: '_id pageNumber articleNumber colour billNumber quantity'
@@ -14,18 +15,121 @@ const getAllWork = asyncHandler(
         res.status(200).json(works);
     }
 );
+// const getWorkById = asyncHandler(
+//     async (req, res) => {
+//         const works = await WorkAssignment.find({ workerId: req.params.id }).sort({ createdAt: -1 }).populate({
+//             path: 'processLotId',
+//             select: '_id pageNumber articleNumber colour billNumber quantity assignDate'
+//         }).populate({
+//             path: 'workerId',
+//             select: '_id workerName workerType'
+//         });
+//         res.status(200).json(works);
+//     }
+// );
+
+// const getWorkById = asyncHandler(
+//     async (req, res) => {
+//         try {
+//             const { search } = req.query;
+//             const workerId = req.params.id;
+
+//             // Find the work assignments for the worker
+//             const works = await WorkAssignment.find({ workerId })
+//                 .sort({ createdAt: -1 })
+//                 .populate({
+//                     path: 'processLotId',
+//                     select: '_id pageNumber articleNumber colour billNumber quantity assignDate'
+//                 })
+//                 .populate({
+//                     path: 'workerId',
+//                     select: '_id workerName workerType'
+//                 });
+
+//             // If there's a search query, filter the populated processLotId
+//             const filteredWorks = search
+//                 ? works.filter(work => work.processLotId.articleNumber.toLowerCase().includes(search.toLowerCase()))
+//                 : works;
+
+//             res.status(200).json(filteredWorks);
+//         } catch (error) {
+//             res.status(500).json({ message: error.message });
+//         }
+//     }
+// );
 const getWorkById = asyncHandler(
     async (req, res) => {
-        const works = await WorkAssignment.find({ workerId: req.params.id }).sort({ createdAt: -1 }).populate({
-            path: 'processLotId',
-            select: '_id pageNumber articleNumber colour billNumber quantity assignDate'
-        }).populate({
-            path: 'workerId',
-            select: '_id workerName workerType'
-        });
-        res.status(200).json(works);
+        try {
+            const { search } = req.query;
+            const workerId = req.params.id;
+
+            const pipeline = [
+                {
+                    $match: { workerId: new mongoose.Types.ObjectId(workerId) }
+                },
+                {
+                    $lookup: {
+                        from: 'processlots',
+                        localField: 'processLotId',
+                        foreignField: '_id',
+                        as: 'processLotId'
+                    }
+                },
+                {
+                    $unwind: '$processLotId'
+                },
+                {
+                    $lookup: {
+                        from: 'workers',
+                        localField: 'workerId',
+                        foreignField: '_id',
+                        as: 'workerId'
+                    }
+                },
+                {
+                    $unwind: '$workerId'
+                },
+                {
+                    $sort: { createdAt: -1 }
+                },
+                {
+                    $project: {
+                        processLotId: {
+                            _id: 1,
+                            pageNumber: 1,
+                            articleNumber: 1,
+                            colour: 1,
+                            billNumber: 1,
+                            quantity: 1,
+                            assignDate: 1
+                        },
+                        workerId: {
+                            _id: 1,
+                            workerName: 1,
+                            workerType: 1
+                        },
+                        createdAt: 1
+                    }
+                }
+            ];
+
+            if (search) {
+                pipeline.splice(3, 0, {
+                    $match: {
+                        'processLotId.articleNumber': { $regex: search, $options: 'i' }
+                    }
+                });
+            }
+
+            const works = await WorkAssignment.aggregate(pipeline);
+
+            res.status(200).json(works);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 );
+
 
 const createWork = asyncHandler(async (req, res) => {
     const { processLotId, workerId } = req.body;
