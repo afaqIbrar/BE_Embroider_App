@@ -108,7 +108,17 @@ const getWorkById = asyncHandler(
                             workerName: 1,
                             workerType: 1
                         },
-                        createdAt: 1
+                        createdAt: 1,
+                        quantityLog: 1,
+                        workType: 1,
+                        quantityReturned: 1,
+                        rate: 1,
+                        total: 1,
+                        lotClearDate: 1,
+                        paymentGiven: 1,
+                        paymentMode: 1,
+                        paymentDate: 1,
+                        reference: 1
                     }
                 }
             ];
