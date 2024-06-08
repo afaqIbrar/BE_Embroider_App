@@ -20,7 +20,7 @@ const createProcessLot = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Process Lot Already exist with this data');
     }
-    if (handWorkerId || dupattaWorkerId || innerWorkerId) {
+    if ((handWorkerId || dupattaWorkerId || innerWorkerId) && !req.body.assignDate) {
         req.body.assignDate = new Date();
     }
     const processLot = await ProcessLot.create({ ...req.body });

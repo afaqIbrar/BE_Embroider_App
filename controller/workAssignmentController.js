@@ -180,7 +180,7 @@ const updateWork = asyncHandler(async (req, res) => {
     if (!existingWork.paymentGiven && req.body.paymentGiven) {
         req.body.paymentDate = new Date();
     }
-    if (!existingWork.lotClearDate && (existingWork.processLotId.quantity === req.body.quantityReturned.toString())) {
+    if (!existingWork.lotClearDate && (existingWork.processLotId.quantity === req.body?.quantityReturned?.toString())) {
         req.body.lotClearDate = new Date();
     }
     const work = await WorkAssignment.findByIdAndUpdate(req.params.id, req.body, { new: true });
