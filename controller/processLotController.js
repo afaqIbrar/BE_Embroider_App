@@ -8,7 +8,7 @@ const getAllProcessLot = asyncHandler(
         if (req.query.search) {
             query.articleNumber = { $regex: req.query.search, $options: 'i' };
         }
-        const processLot = await ProcessLot.find(query).sort({ assignDate: -1 }).populate('handWorkerId dupattaWorkerId innerWorkerId');
+        const processLot = await ProcessLot.find(query).sort({ pageNumber: 1 }).populate('handWorkerId dupattaWorkerId innerWorkerId');
         res.status(200).json(processLot);
     }
 );
