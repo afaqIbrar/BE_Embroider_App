@@ -90,7 +90,7 @@ const getWorkById = asyncHandler(
                     $unwind: '$workerId'
                 },
                 {
-                    $sort: { createdAt: -1 }
+                    $sort: { 'processLotId.assignDate': -1 }
                 },
                 {
                     $project: {
