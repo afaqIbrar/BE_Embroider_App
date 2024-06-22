@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 
 const processLot = mongoose.Schema({
     pageNumber: {
-        type: String,
-        required: [true,"Please add a Page Number"]
+        type: Number,
+        required: [true, "Please add a Page Number"]
     },
     articleNumber: {
         type: String,
@@ -11,14 +11,14 @@ const processLot = mongoose.Schema({
 
     },
     colour: {
-        type:String,
+        type: String,
         required: [true, "Please add Color"],
     },
     billNumber: {
-        type:String,
+        type: String,
     },
     quantity: {
-        type:String,
+        type: String,
     },
     handWorkerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +35,6 @@ const processLot = mongoose.Schema({
     assignDate: {
         type: Date,
     }
-},{timestamps : true});
+}, { timestamps: true });
 
-module.exports = mongoose.model('processLot',processLot);
+module.exports = mongoose.model('processLot', processLot);
