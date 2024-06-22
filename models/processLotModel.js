@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const processLot = mongoose.Schema({
     pageNumber: {
-        type: Number,
+        type: String,
         required: [true, "Please add a Page Number"]
     },
     articleNumber: {
