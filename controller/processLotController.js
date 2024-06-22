@@ -8,8 +8,8 @@ const getAllProcessLot = asyncHandler(
         if (req.query.search) {
             query.articleNumber = { $regex: req.query.search, $options: 'i' };
         }
-        const processLot = await ProcessLot.find(query).sort({ pageNumber: -1 }).populate('handWorkerId dupattaWorkerId innerWorkerId');
-        //processLot.sort((a, b) => b.pageNumber - a.pageNumber);
+        const processLot = await ProcessLot.find(query).populate('handWorkerId dupattaWorkerId innerWorkerId');
+        processLot.sort((a, b) => b.pageNumber - a.pageNumber);
         res.status(200).json(processLot);
     }
 );
