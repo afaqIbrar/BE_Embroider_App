@@ -5,8 +5,17 @@ const { createWorkRecord } = require('../utils/common');
 const getAllProcessLot = asyncHandler(
     async (req, res) => {
         let query = {};
-        if (req.query.search) {
-            query.articleNumber = { $regex: req.query.search, $options: 'i' };
+        let { search, pageValue } = req.query;
+        if (search) {
+            query.articleNumber = { $regex: search, $options: 'i' };
+        }
+        if (req.query.pageValue.length > 0) {
+            query.$expr = {
+                $and: [
+                    { $gte: [{ $toDouble: "$pageNumber" }, Number(pageValue[0])] },
+                    { $lte: [{ $toDouble: "$pageNumber" }, Number(pageValue[1])] }
+                ]
+            };
         }
         const processLot = await ProcessLot.find(query).populate('handWorkerId dupattaWorkerId innerWorkerId');
         processLot.sort((a, b) => b.pageNumber - a.pageNumber);
