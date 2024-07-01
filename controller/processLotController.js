@@ -5,15 +5,15 @@ const { createWorkRecord } = require('../utils/common');
 const getAllProcessLot = asyncHandler(
     async (req, res) => {
         let query = {};
-        let { search, pageValue } = req.query;
+        let { search, pageStartValue, pageEndValue } = req.query;
         if (search) {
             query.articleNumber = { $regex: search, $options: 'i' };
         }
-        if (req.query.pageValue.length > 0) {
+        if (pageStartValue && pageEndValue) {
             query.$expr = {
                 $and: [
-                    { $gte: [{ $toDouble: "$pageNumber" }, Number(pageValue[0])] },
-                    { $lte: [{ $toDouble: "$pageNumber" }, Number(pageValue[1])] }
+                    { $gte: [{ $toDouble: "$pageNumber" }, Number(pageStartValue)] },
+                    { $lte: [{ $toDouble: "$pageNumber" }, Number(pageEndValue)] }
                 ]
             };
         }
