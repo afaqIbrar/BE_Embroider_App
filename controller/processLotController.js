@@ -67,7 +67,7 @@ const updateProcessLot = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Process lot not found');
     }
-    if (!existingProcessLot.assignDate && (req.body.handWorkerId || req.body.dupattaWorkerId || req.body.innerWorkerId)) {
+    if ((!existingProcessLot.assignDate && !req.body.assignDate) && (req.body.handWorkerId || req.body.dupattaWorkerId || req.body.innerWorkerId)) {
         req.body.assignDate = new Date();
     }
     const processLot = await ProcessLot.findByIdAndUpdate(req.params.id, req.body, { new: true });
