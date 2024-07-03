@@ -177,10 +177,10 @@ const updateWork = asyncHandler(async (req, res) => {
         res.status(400);
         throw new Error('Work not found');
     }
-    if (!existingWork.paymentGiven && req.body.paymentGiven) {
+    if (!existingWork.paymentGiven && req.body.paymentGiven && !req.body?.lotClearDate) {
         req.body.paymentDate = new Date();
     }
-    if (!existingWork.lotClearDate && (existingWork.processLotId.quantity === req.body?.quantityReturned?.toString())) {
+    if (!existingWork.lotClearDate && (existingWork.processLotId.quantity === req.body?.quantityReturned?.toString()) && !req.body.lotClearDate) {
         req.body.lotClearDate = new Date();
     }
     const work = await WorkAssignment.findByIdAndUpdate(req.params.id, req.body, { new: true });
