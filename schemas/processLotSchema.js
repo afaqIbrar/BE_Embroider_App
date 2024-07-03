@@ -1,4 +1,4 @@
-const { object, string } =  require('yup');
+const { object, string, date } = require('yup');
 const createProcessLotSchema = object({
     body: object({
         pageNumber: string().required('Page Number is required!!!'),
@@ -8,8 +8,7 @@ const createProcessLotSchema = object({
         quantity: string().optional(),
         handWorkerId: string().optional(),
         dupattaWorkerId: string().optional(),
-        innerWorkerId: string().optional(),
-        assignDate: string().optional()
+        innerWorkerId: date().nullable().default(null),
     })
 });
 const updateProcessLotSchema = object({
@@ -22,7 +21,7 @@ const updateProcessLotSchema = object({
         handWorkerId: string().optional(),
         dupattaWorkerId: string().optional(),
         innerWorkerId: string().optional(),
-        assignDate: string().optional()
+        assignDate: date().nullable().default(null),
     }),
     params: object({
         id: string().required().matches(/^[0-9a-fA-F]{24}$/),
@@ -33,4 +32,4 @@ const deleteProcessLotSchema = object({
         id: string().required().matches(/^[0-9a-fA-F]{24}$/),
     })
 })
-module.exports = {createProcessLotSchema,updateProcessLotSchema,deleteProcessLotSchema};
+module.exports = { createProcessLotSchema, updateProcessLotSchema, deleteProcessLotSchema };
