@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const ProcessLot = require('../models/processLotModel');
-const { createWorkRecord } = require('../utils/common');
+const { createWorkRecord, deleteWorkRecord } = require('../utils/common');
 
 const getAllProcessLot = asyncHandler(
     async (req, res) => {
@@ -71,15 +71,45 @@ const updateProcessLot = asyncHandler(async (req, res) => {
         req.body.assignDate = new Date();
     }
     const processLot = await ProcessLot.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if ((!existingProcessLot?.handWorkerId && req.body.handWorkerId) || (existingProcessLot?.handWorkerId && (existingProcessLot?.handWorkerId.toString() && (existingProcessLot?.handWorkerId.toString() !== req.body.handWorkerId)))) {
-        await createWorkRecord(processLot._id, req.body.handWorkerId, 'HAND_WORK', res);
+    // if ((!existingProcessLot?.handWorkerId && req.body.handWorkerId) || (existingProcessLot?.handWorkerId && (existingProcessLot?.handWorkerId.toString() && (existingProcessLot?.handWorkerId.toString() !== req.body.handWorkerId && req.body.handWorkerId)))) {
+    //     await createWorkRecord(processLot._id, req.body.handWorkerId, 'HAND_WORK', res);
+    // }
+    // if ((!existingProcessLot?.dupattaWorkerId && req.body.dupattaWorkerId) || (existingProcessLot?.dupattaWorkerId && (existingProcessLot?.dupattaWorkerId.toString() && (existingProcessLot?.dupattaWorkerId.toString() !== req.body.dupattaWorkerId && req.body.dupattaWorkerId)))) {
+    //     await createWorkRecord(processLot._id, req.body.dupattaWorkerId, 'DUPATTA_WORK', res);
+    // }
+    // if ((!existingProcessLot?.innerWorkerId && req.body.innerWorkerId) || (existingProcessLot?.innerWorkerId && (existingProcessLot?.innerWorkerId.toString() && (existingProcessLot?.innerWorkerId.toString() !== req.body.innerWorkerId && req.body.innerWorkerId)))) {
+    //     await createWorkRecord(processLot._id, req.body.innerWorkerId, 'INNER_WORK', res);
+    // }
+
+    // HAND_WORKER checks
+    if ((!existingProcessLot?.handWorkerId && req.body.handWorkerId) || (existingProcessLot?.handWorkerId && (existingProcessLot?.handWorkerId.toString() !== req.body.handWorkerId))) {
+        if (req.body.handWorkerId) {
+            await createWorkRecord(processLot._id, req.body.handWorkerId, 'HAND_WORK', res);
+        } else {
+            await deleteWorkRecord(processLot._id, existingProcessLot.handWorkerId, 'HAND_WORK', res);
+        }
     }
-    if ((!existingProcessLot?.dupattaWorkerId && req.body.dupattaWorkerId) || (existingProcessLot?.dupattaWorkerId && (existingProcessLot?.dupattaWorkerId.toString() && (existingProcessLot?.dupattaWorkerId.toString() !== req.body.dupattaWorkerId)))) {
-        await createWorkRecord(processLot._id, req.body.dupattaWorkerId, 'DUPATTA_WORK', res);
+
+    // DUPATTA_WORKER checks
+    if ((!existingProcessLot?.dupattaWorkerId && req.body.dupattaWorkerId) || (existingProcessLot?.dupattaWorkerId && (existingProcessLot?.dupattaWorkerId.toString() !== req.body.dupattaWorkerId))) {
+        if (req.body.dupattaWorkerId) {
+            await createWorkRecord(processLot._id, req.body.dupattaWorkerId, 'DUPATTA_WORK', res);
+        } else {
+            await deleteWorkRecord(processLot._id, existingProcessLot.dupattaWorkerId, 'DUPATTA_WORK', res);
+        }
     }
-    if ((!existingProcessLot?.innerWorkerId && req.body.innerWorkerId) || (existingProcessLot?.innerWorkerId && (existingProcessLot?.innerWorkerId.toString() && (existingProcessLot?.innerWorkerId.toString() !== req.body.innerWorkerId)))) {
-        await createWorkRecord(processLot._id, req.body.innerWorkerId, 'INNER_WORK', res);
+
+
+    // INNER_WORKER checks
+    if ((!existingProcessLot?.innerWorkerId && req.body.innerWorkerId) || (existingProcessLot?.innerWorkerId && (existingProcessLot?.innerWorkerId.toString() !== req.body.innerWorkerId))) {
+        if (req.body.innerWorkerId) {
+            await createWorkRecord(processLot._id, req.body.innerWorkerId, 'INNER_WORK', res);
+        } else {
+            await deleteWorkRecord(processLot._id, existingProcessLot.innerWorkerId, 'INNER_WORK', res);
+        }
     }
+
+    //Delete Work against worker if removed from 
     res.status(200).json({
         processLot
     });

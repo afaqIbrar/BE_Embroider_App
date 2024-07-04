@@ -22,15 +22,18 @@ const processLot = mongoose.Schema({
     },
     handWorkerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'workers' // This should be the name of your worker model
+        ref: 'workers', // This should be the name of your worker model
+        default: null
     },
     dupattaWorkerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'workers'
+        ref: 'workers',
+        default: null
     },
     innerWorkerId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'workers'
+        ref: 'workers',
+        default: null
     },
     assignDate: {
         type: Date,

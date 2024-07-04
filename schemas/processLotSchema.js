@@ -6,9 +6,9 @@ const createProcessLotSchema = object({
         colour: string().required('Colour is Required'),
         billNumber: string().optional(),
         quantity: string().optional(),
-        handWorkerId: string().optional(),
-        dupattaWorkerId: string().optional(),
-        innerWorkerId: date().nullable().default(null),
+        handWorkerId: string().nullable(),
+        dupattaWorkerId: string().nullable(),
+        innerWorkerId: string().nullable(),
     })
 });
 const updateProcessLotSchema = object({
@@ -18,9 +18,9 @@ const updateProcessLotSchema = object({
         colour: string().optional(),
         billNumber: string().optional(),
         quantity: string().optional(),
-        handWorkerId: string().optional(),
-        dupattaWorkerId: string().optional(),
-        innerWorkerId: string().optional(),
+        handWorkerId: string().nullable().default(null),
+        dupattaWorkerId: string().nullable().default(null),
+        innerWorkerId: string().nullable().default(null),
         assignDate: date().nullable().default(null),
     }),
     params: object({
