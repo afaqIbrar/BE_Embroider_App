@@ -12,21 +12,21 @@ const workAssignment = mongoose.Schema({
         required: [true, "Please add Worker Number"],
     },
     quantityLog: {
-        type:String,
+        type: String,
     },
     workType: {
-        type:String,
+        type: String,
         required: [true, "Please add Work type"],
-        enum: ['HAND_WORK', 'DUPATTA_WORK','INNER_WORK'],
+        enum: ['HAND_WORK', 'DUPATTA_WORK', 'INNER_WORK'],
     },
     quantityReturned: {
-        type:String,
+        type: String,
     },
     rate: {
-        type:String,
+        type: String,
     },
     total: {
-        type:String,
+        type: String,
     },
     lotClearDate: {
         type: Date,
@@ -42,8 +42,12 @@ const workAssignment = mongoose.Schema({
     },
     reference: {
         type: String
+    },
+    claim: {
+        type: String
     }
 
-},{timestamps : true});
 
-module.exports = mongoose.model('workAssignment',workAssignment);
+}, { timestamps: true });
+
+module.exports = mongoose.model('workAssignment', workAssignment);

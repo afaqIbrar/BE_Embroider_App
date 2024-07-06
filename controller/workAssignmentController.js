@@ -118,7 +118,8 @@ const getWorkById = asyncHandler(
                         paymentGiven: 1,
                         paymentMode: 1,
                         paymentDate: 1,
-                        reference: 1
+                        reference: 1,
+                        claim: 1
                     }
                 }
             ];
