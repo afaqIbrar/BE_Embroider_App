@@ -18,18 +18,7 @@ const getAllProcessLot = asyncHandler(
             };
         }
         const processLot = await ProcessLot.find(query).populate('handWorkerId dupattaWorkerId innerWorkerId');
-        // processLot.sort((a, b) => b.pageNumber - a.pageNumber);
-        processLot.sort((a, b) => {
-            // Compare pageNumber as numbers
-            const pageNumberComparison = b.pageNumber - a.pageNumber;
-
-            // If pageNumber are the same, compare by assignDate
-            if (pageNumberComparison === 0) {
-                return new Date(b.assignDate) - new Date(a.assignDate);
-            }
-
-            return pageNumberComparison;
-        });
+        processLot.sort((a, b) => b.pageNumber - a.pageNumber);
         res.status(200).json(processLot);
     }
 );
