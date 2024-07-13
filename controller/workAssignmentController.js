@@ -119,7 +119,8 @@ const getWorkById = asyncHandler(
                         paymentMode: 1,
                         paymentDate: 1,
                         reference: 1,
-                        claim: 1
+                        claim: 1,
+                        gazana: 1
                     }
                 }
             ];
@@ -133,9 +134,13 @@ const getWorkById = asyncHandler(
             }
 
             if (startDate && endDate) {
-                const start = moment(startDate).startOf('day').toDate();
-                const end = moment(endDate).endOf('day').toDate();
+                // Convert the dates to ISO 8601 format
+                const start = moment(new Date(startDate)).startOf('day').toDate();
+                const end = moment(new Date(endDate)).endOf('day').toDate();
 
+                if (!moment(start).isValid() || !moment(end).isValid()) {
+                    return res.status(400).json({ message: 'Invalid date format.' });
+                }
                 pipeline.splice(3, 0, {
                     $match: {
                         'processLotId.assignDate': { $gte: start, $lte: end }

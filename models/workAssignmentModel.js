@@ -45,6 +45,9 @@ const workAssignment = mongoose.Schema({
     },
     claim: {
         type: String
+    },
+    gazana: {
+        type: String
     }
 
 
