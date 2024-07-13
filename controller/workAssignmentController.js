@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const WorkAssignment = require('../models/workAssignmentModel');
 const mongoose = require('mongoose');
-
+const moment = require('moment')
 const getAllWork = asyncHandler(
     async (req, res) => {
         let query = {};
@@ -60,7 +60,7 @@ const getAllWork = asyncHandler(
 const getWorkById = asyncHandler(
     async (req, res) => {
         try {
-            const { search } = req.query;
+            const { search, startDate, endDate } = req.query;
             const workerId = req.params.id;
 
             const pipeline = [
@@ -128,6 +128,17 @@ const getWorkById = asyncHandler(
                 pipeline.splice(3, 0, {
                     $match: {
                         'processLotId.articleNumber': { $regex: search, $options: 'i' }
+                    }
+                });
+            }
+
+            if (startDate && endDate) {
+                const start = moment(startDate).startOf('day').toDate();
+                const end = moment(endDate).endOf('day').toDate();
+
+                pipeline.splice(3, 0, {
+                    $match: {
+                        'processLotId.assignDate': { $gte: start, $lte: end }
                     }
                 });
             }
