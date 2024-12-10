@@ -23,13 +23,13 @@ const getWorkerById = asyncHandler(async (req, res) => {
 });
 
 const createWorker = asyncHandler(async (req, res) => {
-    const { workerName, workerType, phoneNumber } = req.body;
+    const { workerName, workerType, phoneNumber, balance, initialBalanceType } = req.body;
     const workerExist = await Worker.findOne({ workerName, workerType });
     if (workerExist) {
         res.status(400);
         throw new Error('Worker Already exist with this data');
     }
-    const worker = await Worker.create({ workerName, workerType, phoneNumber });
+    const worker = await Worker.create({ workerName, workerType, phoneNumber, balance,initialBalanceType });
     if (!worker) {
         res.status(400);
         throw new Error('Invalid Worker Data');
