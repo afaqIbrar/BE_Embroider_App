@@ -48,6 +48,9 @@ const workAssignment = mongoose.Schema({
     },
     gazana: {
         type: String
+    },
+    isDebitTransactionCreated: {
+        type: Boolean
     }
 
 

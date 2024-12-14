@@ -4,7 +4,7 @@ const User = require('../models/userModel');
 
 const authorizeUser = asyncHandler(async (req,res,next) => {
     let token;
-    token = req.cookies.jwt || req.headers.authorization.split('Bearer ')[1];  
+    token = req.cookies.jwt || req.headers.authorization?.split('Bearer ')[1];  
     if(token) {
         try{
             const decoded = jwt.verify(token,process.env.JWT_SECRET);

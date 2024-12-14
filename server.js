@@ -8,6 +8,7 @@ const userRoutes  = require('./routes/userRoutes');
 const workerRoutes = require('./routes/workerRoutes');
 const processLotRoutes = require('./routes/processLotRoutes');
 const workAssignmentRoutes = require('./routes/workAssignmentRoutes');
+const accountRoutes = require('./routes/accountsRoutes');
 const {errorHandler , notFound} =  require('./middleware/errorMiddleWare');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -31,6 +32,7 @@ app.use('/api/users',userRoutes);
 app.use('/api/workers',workerRoutes);
 app.use('/api/processLot',processLotRoutes);
 app.use('/api/work',workAssignmentRoutes);
+app.use('/api/account',accountRoutes);
 app.get('/api/test', (req,res) => res.send('Server is ready'));
 app.get('/',(req,res) => res.json('Server is ready'))
 app.use(notFound);

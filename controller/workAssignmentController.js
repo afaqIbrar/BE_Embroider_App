@@ -2,6 +2,9 @@ const asyncHandler = require('express-async-handler');
 const WorkAssignment = require('../models/workAssignmentModel');
 const mongoose = require('mongoose');
 const moment = require('moment')
+const {createDebitTransaction}  = require('./acountsController');
+const Worker = require('../models/workerModel');
+
 const getAllWork = asyncHandler(
     async (req, res) => {
         let query = {};
@@ -185,11 +188,13 @@ const deleteWork = asyncHandler(async (req, res) => {
 
 
 const updateWork = asyncHandler(async (req, res) => {
-    const existingWork = await WorkAssignment.findById(req.params.id).populate({
+    const existingWork = await WorkAssignment.findById(req.params.id).populate([{
         path: 'processLotId',
         select: '_id quantity',
         options: { lean: false }
-    });
+    },{ path: 'workerId',
+        select: '_id workerName balance',
+        options: { lean: false }}]);
     if (!existingWork) {
         res.status(400);
         throw new Error('Work not found');
@@ -199,6 +204,25 @@ const updateWork = asyncHandler(async (req, res) => {
     }
     if (!existingWork.lotClearDate && (existingWork.processLotId.quantity === req.body?.quantityReturned?.toString()) && !req.body.lotClearDate) {
         req.body.lotClearDate = new Date();
+    }
+    if(!existingWork.isDebitTransactionCreated && req.body?.total) {
+        const worker = await Worker.findById(existingWork?.workerId?._id);
+        // Create Debit Transaction
+        let transactionObject = {
+            workerId: existingWork?.workerId,
+            workerAssignmentId:existingWork?._id,
+            description:`${existingWork?.processLotId?.articleNumber} * ${existingWork?.rate}`,
+            amount: Number(req.body.total),
+            previousBalance: worker?.balance,
+            currentBalance: worker?.balance + Number(req.body.total)
+        }
+        await createDebitTransaction(transactionObject);
+        worker.balance = worker?.balance + Number(req.body.total);
+        await worker.save();
+        req.body.isDebitTransactionCreated = true;
+    }
+    if(existingWork.isDebitTransactionCreated && req.body?.total !== existingWork?.total) {
+        console.log('hello')
     }
     const work = await WorkAssignment.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).json({

@@ -49,7 +49,7 @@ const deleteWorker = asyncHandler(async (req, res) => {
 
 
 const updateWorker = asyncHandler(async (req, res) => {
-    const { workerName, workerType, phoneNumber, extraInfo } = req.body;
+    const { workerName, workerType, phoneNumber, extraInfo, balance } = req.body;
     const worker = await Worker.findById(req.params.id);
     if (!worker) {
         res.status(400);
@@ -58,6 +58,7 @@ const updateWorker = asyncHandler(async (req, res) => {
     worker.workerName = workerName || worker.workerName;
     worker.workerType = workerType || worker.workerType;
     worker.phoneNumber = phoneNumber || worker.phoneNumber;
+    worker.balance = balance || worker.balance;
     worker.extraInfo = extraInfo;
     const updatedWorker = await worker.save();
 
