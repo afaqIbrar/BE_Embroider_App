@@ -84,7 +84,7 @@ const getTransactionByWorkerId = asyncHandler(async (req, res) => {
             path: 'workerAssignmentId',  // Populate the workerAssignmentId field
             populate: {
                 path: 'processLotId',    // Within workerAssignmentId, populate processLotId
-                select: '_id quantity billNumber articleNumber' // Optionally specify which fields you want from processLotId
+                select: '_id quantity billNumber articleNumber colour' // Optionally specify which fields you want from processLotId
             }
         })
         .sort({ recordDate: -1 }); 
