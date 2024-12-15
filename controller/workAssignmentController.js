@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const moment = require('moment')
 const {createDebitTransaction}  = require('./acountsController');
 const Worker = require('../models/workerModel');
+const Account = require('../models/accountsModel');
 
 const getAllWork = asyncHandler(
     async (req, res) => {
@@ -222,7 +223,19 @@ const updateWork = asyncHandler(async (req, res) => {
         req.body.isDebitTransactionCreated = true;
     }
     if(existingWork.isDebitTransactionCreated && req.body?.total !== existingWork?.total) {
-        console.log('hello')
+        const amount = Number(req.body?.total) - existingWork?.total;
+        const worker = await Worker.findById(existingWork?.workerId?._id);
+        const existingDebitTransaction =  await Account.findOne({
+            workerId: existingWork?.workerId?._id,
+            workerAssignmentId: existingWork._id,
+            paymentType: 'DEBIT',
+        });
+        existingDebitTransaction.amount = existingDebitTransaction.currentBalance + amount;
+        existingDebitTransaction.currentBalance = existingDebitTransaction.currentBalance + amount;
+        await existingDebitTransaction.save();
+        worker.balance = worker.balance + amount;
+        await worker.save();
+
     }
     const work = await WorkAssignment.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.status(200).json({
