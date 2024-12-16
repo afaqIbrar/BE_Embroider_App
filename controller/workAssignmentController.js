@@ -191,7 +191,7 @@ const deleteWork = asyncHandler(async (req, res) => {
 const updateWork = asyncHandler(async (req, res) => {
     const existingWork = await WorkAssignment.findById(req.params.id).populate([{
         path: 'processLotId',
-        select: '_id quantity',
+        select: '_id quantity articleNumber',
         options: { lean: false }
     },{ path: 'workerId',
         select: '_id workerName balance',
@@ -212,7 +212,7 @@ const updateWork = asyncHandler(async (req, res) => {
         let transactionObject = {
             workerId: existingWork?.workerId,
             workerAssignmentId:existingWork?._id,
-            description:`${existingWork?.processLotId?.articleNumber} * ${existingWork?.rate}`,
+            description:`${existingWork?.processLotId?.articleNumber} * ${req.body?.rate}`,
             amount: Number(req.body.total),
             previousBalance: worker?.balance,
             currentBalance: worker?.balance + Number(req.body.total)
